@@ -1,41 +1,4 @@
-name: PR Automation (Title Check + Comment + Label)
-
-on:
-  pull_request:
-    types: [opened, edited]
-
-jobs:
-  pr-check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Validate PR Title
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const title = context.payload.pull_request.title;
-            const prNumber = context.issue.number;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-
-            const regex = /^.+ \| [A-Za-z0-9]+$/;
-
-            if (!regex.test(title)) {
-
-              // 🏷️ Add label
-              await github.rest.issues.addLabels({
-                issue_number: prNumber,
-                owner: owner,
-                repo: repo,
-                labels: ["needs correction"]
-              });
-
-              // 💬 Add comment
-              await github.rest.issues.createComment({
-                issue_number: prNumber,
-                owner: owner,
-                repo: repo,
-                body: `❌ **Invalid Pull Request Title Format**
+body: `❌ **Invalid Pull Request Title Format**
 
 📌 **Required Format:**
 <Project Name> | <Roll Number>
@@ -61,8 +24,3 @@ jobs:
 ---
 
 👉 Please edit your PR title to proceed.`
-              });
-
-              // ❌ Fail workflow
-              core.setFailed("Invalid PR title format");
-            }
