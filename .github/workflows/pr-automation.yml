@@ -1,0 +1,70 @@
+name: PR Automation (Title Check + Comment + Label)
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  pr-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate PR Title
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            const prNumber = context.issue.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const regex = /^.+ \| [A-Za-z0-9]+$/;
+
+            if (!regex.test(title)) {
+
+              // ❌ Add Label
+              await github.rest.issues.addLabels({
+                issue_number: prNumber,
+                owner: owner,
+                repo: repo,
+                labels: ["needs correction"]
+              });
+
+              // 💬 Add Comment
+              await github.rest.issues.createComment({
+                issue_number: prNumber,
+                owner: owner,
+                repo: repo,
+                body: `
+❌ **Invalid Pull Request Title Format**
+
+📌 **Required Format:**
+\`<Project Name> | <Roll Number>\`
+
+---
+
+⚠️ **Important Rules:**
+- Must include spaces on BOTH sides of "|"
+- Roll number should be alphanumeric (e.g., 22A51A0001)
+
+---
+
+🚫 **Incorrect Examples:**
+- AI Chatbot|22A51A0001  
+- AI Chatbot |  
+- | 22A51A0001  
+
+---
+
+✅ **Correct Example:**
+- AI Chatbot | 22A51A0001  
+
+---
+
+👉 Please edit your PR title to proceed.
+                `
+              });
+
+              // ❌ Fail the workflow
+              core.setFailed("PR title format is incorrect. Please check the guidelines.");
+            }
