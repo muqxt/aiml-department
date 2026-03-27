@@ -54,6 +54,6 @@ We welcome all students to contribute their projects.
 
 ## Thanks to all the contributors ❤️
 
-<a href="https://github.com/lordsinstitute/it-department/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lordsinstitute/it-department"/>
+<a href="https://github.com/lordsinstitute/aiml-department/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lordsinstitute/aiml-department"/>
 </a>
