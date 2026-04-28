@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+scikit-learn
+joblib
+pandas
+mysql-connector-python
+python-dotenv
+hypothesis
+pytest
+httpx

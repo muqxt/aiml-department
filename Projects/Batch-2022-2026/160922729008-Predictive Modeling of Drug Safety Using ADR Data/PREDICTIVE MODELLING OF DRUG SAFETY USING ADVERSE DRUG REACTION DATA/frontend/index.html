@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsefy — Drug Safety Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fade-in 0.6s ease-out both;
+    }
+    .fade-in-delay-1 { animation-delay: 0.1s; }
+    .fade-in-delay-2 { animation-delay: 0.2s; }
+    .fade-in-delay-3 { animation-delay: 0.3s; }
+    .fade-in-delay-4 { animation-delay: 0.4s; }
+    
+    /* Floating medical plus icons */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(-5deg); }
+    }
+    
+    @keyframes float-slower {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-25px) rotate(3deg); }
+    }
+    
+    .floating-icon {
+      position: absolute;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+    
+    .floating-icon-1 {
+      top: 10%;
+      left: 10%;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .floating-icon-2 {
+      top: 20%;
+      right: 15%;
+      animation: float-slow 8s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    
+    .floating-icon-3 {
+      bottom: 15%;
+      left: 15%;
+      animation: float-slower 7s ease-in-out infinite;
+      animation-delay: 2s;
+    }
+    
+    .floating-icon-4 {
+      bottom: 25%;
+      right: 10%;
+      animation: float 9s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+    
+    .floating-icon-5 {
+      top: 50%;
+      left: 5%;
+      animation: float-slow 7.5s ease-in-out infinite;
+      animation-delay: 1.5s;
+    }
+  </style>
+</head>
+<body class="bg-[#F4F4F4] text-gray-800 flex flex-col min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-[#005461] text-[#F4F4F4] shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-3">
+      <a href="index.html" class="text-2xl font-bold tracking-wide hover:opacity-80 transition-opacity">
+        Pulsefy
+      </a>
+      <ul class="flex flex-wrap gap-4 text-sm font-medium">
+        <li><a href="index.html"    class="text-[#00B7B5] font-semibold transition-colors">Home</a></li>
+        <li><a href="predict.html"  class="hover:text-[#00B7B5] transition-colors">Predict</a></li>
+        <li><a href="ddi.html"      class="hover:text-[#00B7B5] transition-colors">DDI Check</a></li>
+        <li><a href="report.html"   class="hover:text-[#00B7B5] transition-colors">Report</a></li>
+        <li><a href="alerts.html"   class="hover:text-[#00B7B5] transition-colors">Alerts</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="bg-[#018790] text-[#F4F4F4] py-20 px-4 fade-in relative overflow-hidden">
+    <!-- Floating Medical Plus Icons -->
+    <div class="floating-icon floating-icon-1">
+      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="10" width="20" height="60" fill="white" rx="4"/>
+        <rect x="10" y="30" width="60" height="20" fill="white" rx="4"/>
+      </svg>
+    </div>
+    <div class="floating-icon floating-icon-2">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="8" width="16" height="44" fill="white" rx="3"/>
+        <rect x="8" y="22" width="44" height="16" fill="white" rx="3"/>
+      </svg>
+    </div>
+    <div class="floating-icon floating-icon-3">
+      <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="26" y="9" width="18" height="52" fill="white" rx="3"/>
+        <rect x="9" y="26" width="52" height="18" fill="white" rx="3"/>
+      </svg>
+    </div>
+    <div class="floating-icon floating-icon-4">
+      <svg width="65" height="65" viewBox="0 0 65 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="24" y="8" width="17" height="49" fill="white" rx="3"/>
+        <rect x="8" y="24" width="49" height="17" fill="white" rx="3"/>
+      </svg>
+    </div>
+    <div class="floating-icon floating-icon-5">
+      <svg width="55" height="55" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="7" width="15" height="41" fill="white" rx="3"/>
+        <rect x="7" y="20" width="41" height="15" fill="white" rx="3"/>
+      </svg>
+    </div>
+    
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight">
+        Smarter Drug Safety, Powered by Data
+      </h1>
+      <p class="text-lg sm:text-xl mb-8 opacity-90">
+        Predict adverse drug reactions, check drug–drug interactions, and stay informed with real-world community reports — all in one place.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="predict.html"
+           class="bg-[#F4F4F4] text-[#005461] font-semibold px-8 py-3 rounded-xl shadow hover:bg-white hover:shadow-lg transition-all">
+          Run Safety Prediction
+        </a>
+        <a href="ddi.html"
+           class="border-2 border-[#F4F4F4] text-[#F4F4F4] font-semibold px-8 py-3 rounded-xl hover:bg-[#005461] hover:border-[#005461] transition-all">
+          Check Drug Interactions
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Feature Cards -->
+  <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-14">
+    <h2 class="text-2xl font-bold text-[#005461] text-center mb-10 fade-in fade-in-delay-1">
+      What Pulsefy Can Do
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Card 1: Drug Safety Prediction -->
+      <div class="bg-white rounded-xl shadow-md p-6 flex flex-col gap-3 fade-in fade-in-delay-1 hover:shadow-lg transition-shadow">
+        <div class="text-3xl">💊</div>
+        <h3 class="text-xl font-bold text-[#005461]">Drug Safety Prediction</h3>
+        <p class="text-gray-600 text-sm flex-1">
+          Enter drug names, patient age, gender, and disease to receive an AI-powered risk level, severity classification, and plain-language explanation.
+        </p>
+        <a href="predict.html"
+           class="mt-2 inline-block text-center bg-[#018790] text-white font-semibold px-5 py-2 rounded-lg hover:bg-[#005461] transition-colors text-sm">
+          Start Prediction →
+        </a>
+      </div>
+
+      <!-- Card 2: DDI Check -->
+      <div class="bg-white rounded-xl shadow-md p-6 flex flex-col gap-3 fade-in fade-in-delay-2 hover:shadow-lg transition-shadow">
+        <div class="text-3xl">⚠️</div>
+        <h3 class="text-xl font-bold text-[#005461]">DDI Check</h3>
+        <p class="text-gray-600 text-sm flex-1">
+          Check whether two drugs have known interactions. Get severity ratings and clinical descriptions sourced from a curated interaction database.
+        </p>
+        <a href="ddi.html"
+           class="mt-2 inline-block text-center bg-[#018790] text-white font-semibold px-5 py-2 rounded-lg hover:bg-[#005461] transition-colors text-sm">
+          Check Interactions →
+        </a>
+      </div>
+
+      <!-- Card 3: Community Reports -->
+      <div class="bg-white rounded-xl shadow-md p-6 flex flex-col gap-3 fade-in fade-in-delay-3 hover:shadow-lg transition-shadow">
+        <div class="text-3xl">📋</div>
+        <h3 class="text-xl font-bold text-[#005461]">Community Reports</h3>
+        <p class="text-gray-600 text-sm flex-1">
+          Submit your own adverse drug reaction experience or browse aggregated community alerts to see which drugs are generating the most reports.
+        </p>
+        <div class="flex gap-2 mt-2">
+          <a href="report.html"
+             class="flex-1 text-center bg-[#018790] text-white font-semibold px-3 py-2 rounded-lg hover:bg-[#005461] transition-colors text-sm">
+            Report ADR
+          </a>
+          <a href="alerts.html"
+             class="flex-1 text-center border border-[#018790] text-[#018790] font-semibold px-3 py-2 rounded-lg hover:bg-[#018790] hover:text-white transition-colors text-sm">
+            View Alerts
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Stats Bar -->
+    <div id="stats-bar"
+         class="mt-12 bg-[#005461] text-[#F4F4F4] rounded-xl shadow-md p-6 flex flex-col sm:flex-row items-center justify-center gap-4 text-center fade-in fade-in-delay-4">
+      <div>
+        <p class="text-sm uppercase tracking-widest opacity-70 mb-1">Community Reports Submitted</p>
+        <p id="report-count" class="text-4xl font-extrabold text-[#00B7B5]">—</p>
+      </div>
+      <div class="hidden sm:block w-px h-12 bg-[#F4F4F4] opacity-20"></div>
+      <div>
+        <p class="text-sm opacity-80">Real-world ADR data from the Pulsefy community.</p>
+        <a href="alerts.html" class="text-[#00B7B5] text-sm font-semibold hover:underline">View all alerts →</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Project Stats Section -->
+  <section class="bg-white py-16 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-[#005461] text-center mb-4">
+        Powered by Real Data
+      </h2>
+      <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+        Pulsefy leverages FDA FAERS data and clinical drug interaction databases to provide evidence-based safety predictions.
+      </p>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Stat 1: Dataset Size -->
+        <div class="bg-gradient-to-br from-[#018790] to-[#005461] text-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+          <div class="text-5xl font-extrabold mb-2">376K+</div>
+          <div class="text-sm uppercase tracking-wide opacity-90">Training Records</div>
+          <p class="text-xs mt-3 opacity-75">FDA FAERS adverse event reports from 2015-2026</p>
+        </div>
+        
+        <!-- Stat 2: Drug Coverage -->
+        <div class="bg-gradient-to-br from-[#00B7B5] to-[#018790] text-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+          <div class="text-5xl font-extrabold mb-2">8,431</div>
+          <div class="text-sm uppercase tracking-wide opacity-90">Drugs Analyzed</div>
+          <p class="text-xs mt-3 opacity-75">Comprehensive reaction mapping for common medications</p>
+        </div>
+        
+        <!-- Stat 3: Model Accuracy -->
+        <div class="bg-gradient-to-br from-[#018790] to-[#005461] text-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+          <div class="text-5xl font-extrabold mb-2">83.7%</div>
+          <div class="text-sm uppercase tracking-wide opacity-90">Model Accuracy</div>
+          <p class="text-xs mt-3 opacity-75">RandomForest classifier with balanced class weights</p>
+        </div>
+        
+        <!-- Stat 4: DDI Database -->
+        <div class="bg-gradient-to-br from-[#00B7B5] to-[#018790] text-white rounded-xl shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+          <div class="text-5xl font-extrabold mb-2">50+</div>
+          <div class="text-sm uppercase tracking-wide opacity-90">DDI Pairs</div>
+          <p class="text-xs mt-3 opacity-75">Curated drug-drug interaction database with severity ratings</p>
+        </div>
+        
+      </div>
+      
+      <!-- Additional Info Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        
+        <!-- Feature 1 -->
+        <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="bg-[#018790] text-white rounded-lg p-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="font-bold text-[#005461]">Data-Driven Insights</h3>
+          </div>
+          <p class="text-sm text-gray-600">
+            Predictions based on real-world adverse event patterns from millions of FDA reports.
+          </p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="bg-[#00B7B5] text-white rounded-lg p-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="font-bold text-[#005461]">Fast & Accurate</h3>
+          </div>
+          <p class="text-sm text-gray-600">
+            Get instant risk assessments with confidence scores and structured explanations.
+          </p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="bg-[#018790] text-white rounded-lg p-2">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+            </div>
+            <h3 class="font-bold text-[#005461]">Community Powered</h3>
+          </div>
+          <p class="text-sm text-gray-600">
+            Contribute and access real-world ADR reports from the Pulsefy community.
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#005461] text-[#F4F4F4] text-center py-5 text-sm opacity-90">
+    <p>&copy; 2025 Pulsefy — Drug Safety Intelligence Platform</p>
+  </footer>
+
+  <script>
+    // Fetch total community report count from GET /alerts
+    (async function loadStats() {
+      const countEl = document.getElementById('report-count');
+      try {
+        const res = await fetch('http://localhost:8000/alerts');
+        if (!res.ok) throw new Error('Network response was not ok');
+        const data = await res.json();
+        const alerts = data.alerts || [];
+        const total = alerts.reduce((sum, a) => sum + (a.report_count || 0), 0);
+        countEl.textContent = total.toLocaleString();
+      } catch {
+        countEl.textContent = 'N/A';
+      }
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsefy — Community ADR Report</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fade-in 0.5s ease-out both;
+    }
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes toast-out {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(20px); }
+    }
+    .toast-show {
+      animation: toast-in 0.3s ease-out forwards;
+    }
+    .toast-hide {
+      animation: toast-out 0.3s ease-in forwards;
+    }
+  </style>
+</head>
+<body class="bg-[#F4F4F4] text-gray-800 flex flex-col min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-[#005461] text-[#F4F4F4] shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-3">
+      <a href="index.html" class="text-2xl font-bold tracking-wide hover:opacity-80 transition-opacity">Pulsefy</a>
+      <ul class="flex flex-wrap gap-4 text-sm font-medium">
+        <li><a href="index.html"   class="hover:text-[#00B7B5] transition-colors">Home</a></li>
+        <li><a href="predict.html" class="hover:text-[#00B7B5] transition-colors">Predict</a></li>
+        <li><a href="ddi.html"     class="hover:text-[#00B7B5] transition-colors">DDI Check</a></li>
+        <li><a href="report.html"  class="text-[#00B7B5] font-semibold transition-colors">Report</a></li>
+        <li><a href="alerts.html"  class="hover:text-[#00B7B5] transition-colors">Alerts</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="bg-[#018790] text-[#F4F4F4] py-10 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <h1 class="text-3xl sm:text-4xl font-extrabold mb-2">Community ADR Report</h1>
+      <p class="text-base sm:text-lg opacity-90">
+        Help the community by reporting adverse drug reactions you have experienced.
+      </p>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-3xl mx-auto w-full px-4 py-10">
+
+    <!-- Report Form Card -->
+    <div class="bg-white rounded-xl shadow-md p-6 fade-in">
+      <h2 class="text-xl font-bold text-[#005461] mb-5">Submit an Adverse Reaction</h2>
+      <form id="report-form" class="flex flex-col gap-5" novalidate>
+
+        <!-- Drug Name -->
+        <div class="flex flex-col gap-1">
+          <label for="drug" class="text-sm font-semibold text-gray-700">Drug Name</label>
+          <input
+            id="drug"
+            type="text"
+            placeholder="e.g. metformin"
+            class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#018790] focus:border-transparent"
+            required
+          />
+        </div>
+
+        <!-- Reaction Description -->
+        <div class="flex flex-col gap-1">
+          <label for="reaction" class="text-sm font-semibold text-gray-700">Reaction Description</label>
+          <textarea
+            id="reaction"
+            rows="4"
+            placeholder="Describe the adverse reaction you experienced..."
+            class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#018790] focus:border-transparent resize-none"
+            required
+          ></textarea>
+        </div>
+
+        <!-- Severity -->
+        <div class="flex flex-col gap-1">
+          <label for="severity" class="text-sm font-semibold text-gray-700">Severity</label>
+          <select
+            id="severity"
+            class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#018790] focus:border-transparent bg-white"
+            required
+          >
+            <option value="" disabled selected>Select severity</option>
+            <option value="Mild">Mild</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Severe">Severe</option>
+          </select>
+        </div>
+
+        <!-- Error message -->
+        <p id="form-error" class="text-red-600 text-sm hidden"></p>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          id="submit-btn"
+          class="bg-[#018790] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#005461] transition-colors flex items-center justify-center gap-2"
+        >
+          <span id="btn-text">Submit Report</span>
+          <svg id="btn-spinner" class="hidden animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+        </button>
+      </form>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#005461] text-[#F4F4F4] text-center py-5 text-sm opacity-90">
+    <p>&copy; 2025 Pulsefy — Drug Safety Intelligence Platform</p>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div
+    id="toast"
+    class="hidden fixed bottom-6 right-6 bg-[#00B7B5] text-white rounded-xl shadow-lg px-6 py-4 text-sm font-semibold z-50"
+  ></div>
+
+  <script src="js/report.js"></script>
+</body>
+</html>

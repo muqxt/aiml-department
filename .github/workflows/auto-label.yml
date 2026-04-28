@@ -14,15 +14,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Add default labels
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
             const { owner, repo } = context.repo;
+            const requiredLabels = [
+              { name: "project-submitted", color: "e4e669", description: "Project submitted for review" },
+              { name: "project-under-review", color: "f9d0c4", description: "Project is under review" },
+            ];
+
+            for (const label of requiredLabels) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name: label.name });
+              } catch (e) {
+                if (e.status === 404) {
+                  console.log(`Label "${label.name}" not found — creating it.`);
+                  await github.rest.issues.createLabel({ owner, repo, ...label });
+                } else {
+                  throw e;
+                }
+              }
+            }
 
             await github.rest.issues.addLabels({
               issue_number: prNumber,
               owner,
               repo,
-              labels: ["project-submitted", "project-under-review"],
+              labels: requiredLabels.map(l => l.name),
             });
+            console.log(`Labels added to PR #${prNumber}.`);
