@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical Image Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Background Video -->
+<video autoplay muted loop id="bg-video">
+    <source src="{{ url_for('static', filename='bg.mp4') }}" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<div class="container">
+    <h1>ENHANCING DIAGNOSTIC ACCURACY THROUGH GENERATIVE AI AND SYNTHETIC DATA GENERATION FOR ROBUST MEDICAL IMAGING</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" required>
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if filename %}
+    <div class="preview">
+        <h3>Uploaded Image</h3>
+        <img src="{{ url_for('uploaded_file', filename=filename) }}">
+    </div>
+    {% endif %}
+
+    {% if prediction %}
+    <div class="result">
+        <h2>Prediction</h2>
+        <span class="badge {{ prediction }}">{{ prediction }}</span>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
